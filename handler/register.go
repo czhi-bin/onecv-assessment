@@ -10,10 +10,10 @@ import (
 )
 
 // @router /api/register [POST]
-func Register(c *gin.Context) {
+func RegisterStudent(c *gin.Context) {
 	var err error
 	var req model.RegisterRequest
-	
+
 	// Check request body
 	err = c.ShouldBindJSON(&req)
 	if err != nil {
@@ -39,4 +39,3 @@ func Register(c *gin.Context) {
 		"message": "Successfully registered the students to the teacher!",
 	})
 }
-

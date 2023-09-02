@@ -10,7 +10,7 @@ import (
 )
 
 // @router /api/suspend [POST]
-func Suspend(c *gin.Context) {
+func SuspendStudent(c *gin.Context) {
 	var err error
 	var req model.SuspendRequest
 

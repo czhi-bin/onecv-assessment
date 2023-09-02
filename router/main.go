@@ -10,11 +10,11 @@ import (
 func RegisterRoutes(r *gin.Engine) {
 	apiGroup := r.Group("/api")
 
-	apiGroup.POST("/register", handler.Register)
+	apiGroup.POST("/register", handler.RegisterStudent)
 
 	apiGroup.GET("/commonstudents", handler.GetCommonStudentList)
 
-	apiGroup.POST("/suspend", handler.Suspend)
+	apiGroup.POST("/suspend", handler.SuspendStudent)
 
 	apiGroup.GET("/retrievefornotifications", handler.GetNotificationList)
 }
