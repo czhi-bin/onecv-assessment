@@ -7,7 +7,6 @@ import (
 
 	"github.com/czhi-bin/onecv-assessment/db"
 	"github.com/czhi-bin/onecv-assessment/model"
-	"github.com/czhi-bin/onecv-assessment/utils"
 )
 
 // @router /api/commonstudents [GET]
@@ -18,7 +17,6 @@ func GetCommonStudentList(c *gin.Context) {
 	// Check the query parameters
 	err = c.ShouldBindQuery(&req)
 	if err != nil {
-		utils.Logger.Debug(err, c.Request.URL.Query(), "Failed to bind query parameters")
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request! Please provide the correct query parameters.",
 		})
