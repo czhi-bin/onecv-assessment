@@ -12,7 +12,7 @@ func GetNonSuspendedRegisteredStudents(teacherEmail string) ([]string, error) {
 	teacherId, err := getTeacherId(teacherEmail)
 	if err != nil {
 		if err.Error() == "teacher not found" {
-			return nil, nil
+			return []string{}, nil
 		}
 		return nil, err
 	}

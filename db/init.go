@@ -15,14 +15,17 @@ import (
 var DB *gorm.DB
 
 // Initialize database connection and load database schema
-func Init() {
-	utils.Logger.Info("Initializing database connection")
-
+func Init(test bool) {
 	host := config.PSQL_HOST
 	user := config.PSQL_USER
 	password := config.PSQL_PASSWORD
 	port := config.PSQL_PORT
-	dbName := config.PSQL_DBNAME
+	var dbName string
+	if test {
+		dbName = config.PSQL_TEST_DBNAME
+	} else {
+		dbName = config.PSQL_DBNAME
+	}
 
 	var err error
 	DB, err = gorm.Open(
@@ -39,14 +42,9 @@ func Init() {
 
 	// Migrate the schema
 	loadDatabase()
-
-	utils.Logger.Info("Database connection initialized. Connected to database: ", 
-					dbName, ", on host: ", host, ", port: ", port, ", as user: ", user)
 }
 
 func loadDatabase() {
-	utils.Logger.Info("Loading database schema")
-
 	err := DB.AutoMigrate(&model.Teacher{})
 	if err != nil {
 		log.Fatal(err, "Failed to migrate teacher table")
@@ -61,6 +59,4 @@ func loadDatabase() {
 	if err != nil {
 		log.Fatal(err, "Failed to migrate registration table")
 	}
-
-	utils.Logger.Info("Database schema loaded")
 }

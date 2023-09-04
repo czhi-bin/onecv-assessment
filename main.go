@@ -11,7 +11,7 @@ import (
 
 func main() {
 	utils.InitLogger()
-	db.Init()
+	db.Init(false)
 
 	r := gin.Default()
 	
