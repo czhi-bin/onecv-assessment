@@ -135,6 +135,54 @@ func TestGetNotificationList_NoRegisteredStudent2(t *testing.T) {
     assert.Equal(t, `{"recipients":["studentagnes@gmail.com","studentmiche@gmail.com"]}`, w.Body.String())
 }
 
+func TestGetNotificationList_MentionedStudentSuspended(t *testing.T) {
+	// Set up the test database
+    db.Init(true)
+	populateTestDatabaseForNotificationList()
+
+    // Initialize a new Gin router
+    router := gin.Default()
+
+    router.POST("/api/retrievefornotifications", GetNotificationList)
+
+    // Create a fake request
+	payload := `{"teacher": "allstudentsuspended@gmail.com", 
+				"notification": "Hello students! @studentsuspended@gmail.com"
+				}`
+    req, _ := http.NewRequest("POST", "/api/retrievefornotifications", strings.NewReader(payload))
+	req.Header.Set("Content-Type", "application/json")
+
+    w := httptest.NewRecorder()
+    router.ServeHTTP(w, req)
+    // Should return 200 OK, with a list of common students
+    assert.Equal(t, http.StatusOK, w.Code)
+    assert.Equal(t, `{"recipients":[]}`, w.Body.String())
+}
+
+func TestGetNotificationList_SomeMentionedStudentSuspended(t *testing.T) {
+	// Set up the test database
+    db.Init(true)
+	populateTestDatabaseForNotificationList()
+
+    // Initialize a new Gin router
+    router := gin.Default()
+
+    router.POST("/api/retrievefornotifications", GetNotificationList)
+
+    // Create a fake request
+	payload := `{"teacher": "allstudentsuspended@gmail.com", 
+				"notification": "Hello students! @studentsuspended@gmail.com @studenthon@gmail.com"
+				}`
+    req, _ := http.NewRequest("POST", "/api/retrievefornotifications", strings.NewReader(payload))
+	req.Header.Set("Content-Type", "application/json")
+
+    w := httptest.NewRecorder()
+    router.ServeHTTP(w, req)
+    // Should return 200 OK, with a list of common students
+    assert.Equal(t, http.StatusOK, w.Code)
+    assert.Equal(t, `{"recipients":["studenthon@gmail.com"]}`, w.Body.String())
+}
+
 func TestGetNotificationList_InvalidEmail(t *testing.T) {
 	// Set up the test database
     db.Init(true)
