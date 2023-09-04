@@ -42,8 +42,5 @@ func SuspendStudent(c *gin.Context) {
 	}
 
 	// Suspend successful
-	c.JSON(http.StatusNoContent, gin.H{
-		"message": "Successfully suspended the student!",
-	})
-
+	c.JSON(http.StatusNoContent, nil)
 }

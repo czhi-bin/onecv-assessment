@@ -35,7 +35,5 @@ func RegisterStudent(c *gin.Context) {
 	}
 
 	// Registration successful
-	c.JSON(http.StatusNoContent, gin.H{
-		"message": "Successfully registered the students to the teacher!",
-	})
+	c.JSON(http.StatusNoContent, nil)
 }

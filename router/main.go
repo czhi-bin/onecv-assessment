@@ -16,5 +16,5 @@ func RegisterRoutes(r *gin.Engine) {
 
 	apiGroup.POST("/suspend", handler.SuspendStudent)
 
-	apiGroup.GET("/retrievefornotifications", handler.GetNotificationList)
+	apiGroup.POST("/retrievefornotifications", handler.GetNotificationList)
 }

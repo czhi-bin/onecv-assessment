@@ -32,6 +32,13 @@ func GetCommonStudentList(c *gin.Context) {
 		return
 	}
 
+	if commonStudents == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"students": []string{},
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"students": commonStudents,
 	})
