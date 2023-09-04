@@ -28,7 +28,7 @@ func GetCommonStudents(teacherEmails []string) ([]string, error) {
 	teacherIds := getTeacherIds(teachers)
 	err = DB.Model(&model.Registration{}).
 		Select("student_id as id").Where("teacher_id IN (?)", teacherIds).
-		Group("student_id").Having("count(student_id) = ?", len(teachers)).
+		Group("student_id").Having("count(teacher_id) = ?", len(teachers)).
 		Find(&commonStudents).Error
 	if err != nil {
 		// error in retrieving registrations
