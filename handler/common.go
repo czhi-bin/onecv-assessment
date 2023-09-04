@@ -11,10 +11,6 @@ import (
 
 // @router /api/commonstudents [GET]
 func GetCommonStudentList(c *gin.Context) {
-	// TODO: implement this
-	// idea: loop through each teacher, find the students registered
-	// to each of them, then do a set intersection to find the common
-
 	var err error
 	var req model.CommonStudentsRequest
 
