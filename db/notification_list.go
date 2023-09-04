@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/czhi-bin/onecv-assessment/model"
+	"github.com/czhi-bin/onecv-assessment/utils"
 )
 
 // Retrieve the non-suspended registered students of the teacher
@@ -22,6 +23,7 @@ func GetNonSuspendedRegisteredStudents(teacherEmail string) ([]string, error) {
 		Joins("JOIN students ON registrations.student_id = students.id AND students.is_suspended = false").
 		Find(&students).Error
 	if err != nil {
+		utils.Logger.Error(err, teacherId, "Error in retrieving non-suspended registered student from database")
 		return nil, err
 	}
 
@@ -30,10 +32,7 @@ func GetNonSuspendedRegisteredStudents(teacherEmail string) ([]string, error) {
 		return nil, nil
 	}
 
-	studentEmails, err := getStudentEmails(students)
-	if err != nil {
-		return nil, err
-	}
+	studentEmails:= getStudentEmails(students)
 
 	return studentEmails, nil
 }
@@ -43,6 +42,7 @@ func getTeacherId(teacherEmail string) (int64, error) {
 	var teacher model.Teacher
 	db := DB.Where("email = ?", teacherEmail).Limit(1).Find(&teacher)
 	if db.Error != nil {
+		utils.Logger.Error(db.Error, teacherEmail, "Error in retrieving teacher using email from database")
 		return 0, db.Error
 	} else if db.RowsAffected == 0 {
 		return 0, errors.New("teacher not found")
@@ -51,18 +51,20 @@ func getTeacherId(teacherEmail string) (int64, error) {
 	return teacher.ID, nil
 }
 
-func getStudentEmails(students []model.Student) ([]string, error) {
+func getStudentEmails(students []model.Student) []string {
 	studentEmails := make([]string, len(students))
 	for i, student := range students {
 		studentEmails[i] = student.Email
 	}
 
-	return studentEmails, nil
+	return studentEmails
 }
 
 func CheckIsSuspended(studentEmail string) (bool, error) {
 	db := DB.Where("email = ? AND is_suspended = ?", studentEmail, true).Find(&model.Student{})
 	if db.Error != nil {
+		utils.Logger.Error(db.Error, studentEmail, 
+			"Error in checking student suspension status using email from database")
 		return false, db.Error
 	}
 

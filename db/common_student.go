@@ -2,6 +2,7 @@ package db
 
 import (
 	"github.com/czhi-bin/onecv-assessment/model"
+	"github.com/czhi-bin/onecv-assessment/utils"
 )
 
 type CommonStudent struct {
@@ -16,7 +17,7 @@ func GetCommonStudents(teacherEmails []string) ([]string, error) {
 	// retrieve teacher IDs by emails
 	err := DB.Where("email IN (?)", teacherEmails).Find(&teachers).Error
 	if err != nil {
-		// error in retrieving teachers
+		utils.Logger.Error(err, teacherEmails, "Error in retrieving teachers using teacher IDs from database")
 		return nil, err
 	} else if len(teachers) != len(teacherEmails) {
 		// some teacher have no students, common students will be empty
@@ -31,13 +32,12 @@ func GetCommonStudents(teacherEmails []string) ([]string, error) {
 		Group("student_id").Having("count(teacher_id) = ?", len(teachers)).
 		Find(&commonStudents).Error
 	if err != nil {
-		// error in retrieving registrations
+		utils.Logger.Error(err, teacherIds, len(teachers), "Error in retrieving registrations from database")
 		return nil, err
 	}
 
 	commonStudentEmails, err := getStudentEmailsFromIds(commonStudents)
 	if err != nil {
-		// error in retrieving student emails
 		return nil, err
 	}
 
@@ -59,6 +59,7 @@ func getStudentEmailsFromIds(commonStudents []CommonStudent) ([]string, error) {
 	for i, commonStudent := range commonStudents {
 		err := DB.Model(&model.Student{}).Where("id = ?", commonStudent.ID).Find(&commonStudent).Error
 		if err != nil {
+			utils.Logger.Error(err, commonStudent, "Error in retrieving student email using ID from database")
 			return nil, err
 		}
 		studentEmails[i] = commonStudent.Email

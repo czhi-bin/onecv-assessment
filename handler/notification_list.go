@@ -9,6 +9,7 @@ import (
 
 	"github.com/czhi-bin/onecv-assessment/db"
 	"github.com/czhi-bin/onecv-assessment/model"
+	"github.com/czhi-bin/onecv-assessment/utils"
 )
 
 // @router /api/retrievefornotifications [GET]
@@ -19,6 +20,7 @@ func GetNotificationList(c *gin.Context) {
 	// Check request body
 	err = c.ShouldBindJSON(&req)
 	if err != nil {
+		utils.Logger.Debug(err, c.Request.Body, "Failed to bind request body")
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request body! Please check your request body and try again.",
 		})

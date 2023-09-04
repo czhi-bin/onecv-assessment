@@ -9,12 +9,15 @@ import (
 
 	"github.com/czhi-bin/onecv-assessment/config"
 	"github.com/czhi-bin/onecv-assessment/model"
+	"github.com/czhi-bin/onecv-assessment/utils"
 )
 
 var DB *gorm.DB
 
 // Initialize database connection and load database schema
 func Init() {
+	utils.Logger.Info("Initializing database connection")
+
 	host := config.PSQL_HOST
 	user := config.PSQL_USER
 	password := config.PSQL_PASSWORD
@@ -31,14 +34,19 @@ func Init() {
 	)
 
 	if err != nil {
-		log.Fatal(err, "Failed to connect to database")
+		utils.Logger.Fatal(err, "Failed to connect to database")
 	}
 
 	// Migrate the schema
 	loadDatabase()
+
+	utils.Logger.Info("Database connection initialized. Connected to database: ", 
+					dbName, ", on host: ", host, ", port: ", port, ", as user: ", user)
 }
 
 func loadDatabase() {
+	utils.Logger.Info("Loading database schema")
+
 	err := DB.AutoMigrate(&model.Teacher{})
 	if err != nil {
 		log.Fatal(err, "Failed to migrate teacher table")
@@ -54,4 +62,5 @@ func loadDatabase() {
 		log.Fatal(err, "Failed to migrate registration table")
 	}
 
+	utils.Logger.Info("Database schema loaded")
 }

@@ -2,6 +2,7 @@ package db
 
 import (
 	"github.com/czhi-bin/onecv-assessment/model"
+	"github.com/czhi-bin/onecv-assessment/utils"
 )
 
 // Register the student to the teacher
@@ -10,7 +11,7 @@ func CreateRegistration(teacherEmail, studentEmail string) error {
 	var teacher model.Teacher
 	err := DB.Where(model.Teacher{Email: teacherEmail}).FirstOrCreate(&teacher).Error
 	if err != nil {
-		// error in retrieving teacher
+		utils.Logger.Error(err, teacherEmail, "Error in retrieving/creating teacher record using email from database")
 		return err
 	}
 
@@ -18,7 +19,7 @@ func CreateRegistration(teacherEmail, studentEmail string) error {
 	var student model.Student
 	err = DB.Where(model.Student{Email: studentEmail}).FirstOrCreate(&student).Error
 	if err != nil {
-		// error in retrieving student
+		utils.Logger.Error(err, studentEmail, "Error in retrieving/creating student record using email from database")
 		return err
 	}
 
@@ -29,7 +30,7 @@ func CreateRegistration(teacherEmail, studentEmail string) error {
 		StudentID: student.ID,
 	}).FirstOrCreate(&registration).Error
 	if err != nil {
-		// error in creating registration
+		utils.Logger.Error(err, teacher.ID, student.ID, "Error in creating registration record in database")
 		return err
 	}
 

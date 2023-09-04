@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/czhi-bin/onecv-assessment/handler"
+	"github.com/czhi-bin/onecv-assessment/utils"
 )
 
 // Register all the routes
@@ -17,4 +18,6 @@ func RegisterRoutes(r *gin.Engine) {
 	apiGroup.POST("/suspend", handler.SuspendStudent)
 
 	apiGroup.POST("/retrievefornotifications", handler.GetNotificationList)
+
+	utils.Logger.Info("Routes registered")
 }
