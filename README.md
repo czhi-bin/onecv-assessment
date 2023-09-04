@@ -144,7 +144,7 @@ Success response body:
 
 Payload 3 (No registered student / All student suspended & no student mentioned in notification):
 {
-    "teacher":  "teacherken@gmail.com",
+    "teacher":  "norecipients@gmail.com",
     "notification": "Hello students!"
 }
 Success response body:
@@ -154,7 +154,7 @@ Success response body:
 
 Payload 4 (No registered student / All student suspended & some student mentioned in notification):
 {
-    "teacher":  "teacherken@gmail.com",
+    "teacher":  "norecipients@gmail.com",
     "notification": "Hello students! @studentagnes@gmail.com @studentmiche@gmail.com"
 }
 Success response body:
