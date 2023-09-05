@@ -31,7 +31,7 @@ func TestGetCommonStudentList_ValidRequest1(t *testing.T) {
 
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
-    // Should return 200 OK, with a list of common students
+    // Should return 200 OK, with a list of common students, and the student only under teacher
     assert.Equal(t, http.StatusOK, w.Code)
     assert.Equal(t, 
         `{"students":["commonstudent1@gmail.com","commonstudent2@gmail.com","student_only_under_teacher_wow@gmail.com"]}`, 
@@ -83,7 +83,7 @@ func TestGetCommonStudentList_TeacherWithoutStudent(t *testing.T) {
 
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
-    // Should return 200 OK, with a list of common students
+    // Should return 200 OK, with an empty list since there will be no common students
     assert.Equal(t, http.StatusOK, w.Code)
     assert.Equal(t, `{"students":[]}`, w.Body.String())
 }

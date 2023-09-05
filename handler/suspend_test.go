@@ -85,7 +85,7 @@ func TestSuspendStudent_NonExistentStudent(t *testing.T) {
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
 
-    // Should return 400 Bad Request, with an error message
+    // Should return 400 Bad Request, with an error message that the student is not found
     assert.Equal(t, http.StatusBadRequest, w.Code)
     assert.Equal(t, `{"message":"Student not found! Please check the student email and try again."}`, w.Body.String())
 }

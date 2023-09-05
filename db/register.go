@@ -7,7 +7,7 @@ import (
 
 // Register the student to the teacher
 func CreateRegistration(teacherEmail, studentEmail string) error {
-	// retrieve teacher ID by email
+	// retrieve teacher ID by email if exists, else create a new record
 	var teacher model.Teacher
 	err := DB.Where(model.Teacher{Email: teacherEmail}).FirstOrCreate(&teacher).Error
 	if err != nil {
@@ -15,7 +15,7 @@ func CreateRegistration(teacherEmail, studentEmail string) error {
 		return err
 	}
 
-	// retrieve student ID by email
+	// retrieve student ID by email if exists, else create a new record
 	var student model.Student
 	err = DB.Where(model.Student{Email: studentEmail}).FirstOrCreate(&student).Error
 	if err != nil {

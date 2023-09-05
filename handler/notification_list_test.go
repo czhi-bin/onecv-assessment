@@ -32,7 +32,7 @@ func TestGetNotificationList_ValidRequest1(t *testing.T) {
 
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
-    // Should return 200 OK, with a list of common students
+    // Should return 200 OK, with a list of registered students and mentioned students
     assert.Equal(t, http.StatusOK, w.Code)
     assert.Equal(t, 
         `{"recipients":["studentagnes@gmail.com","studentbob@gmail.com","studentmiche@gmail.com"]}`, 
@@ -58,7 +58,7 @@ func TestGetNotificationList_ValidRequest2(t *testing.T) {
 
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
-    // Should return 200 OK, with a list of common students
+    // Should return 200 OK, with a list of registered students
     assert.Equal(t, http.StatusOK, w.Code)
     assert.Equal(t, `{"recipients":["studentbob@gmail.com"]}`, w.Body.String())
 }
@@ -82,7 +82,7 @@ func TestGetNotificationList_AllStudentSuspended(t *testing.T) {
 
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
-    // Should return 200 OK, with a list of common students
+    // Should return 200 OK, with an empty list
     assert.Equal(t, http.StatusOK, w.Code)
     assert.Equal(t, `{"recipients":[]}`, w.Body.String())
 }
@@ -106,7 +106,7 @@ func TestGetNotificationList_NoRegisteredStudent1(t *testing.T) {
 
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
-    // Should return 200 OK, with a list of common students
+    // Should return 200 OK, with an empty list
     assert.Equal(t, http.StatusOK, w.Code)
     assert.Equal(t, `{"recipients":[]}`, w.Body.String())
 }
@@ -130,7 +130,7 @@ func TestGetNotificationList_NoRegisteredStudent2(t *testing.T) {
 
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
-    // Should return 200 OK, with a list of common students
+    // Should return 200 OK, with a list of mentioned students
     assert.Equal(t, http.StatusOK, w.Code)
     assert.Equal(t, `{"recipients":["studentagnes@gmail.com","studentmiche@gmail.com"]}`, w.Body.String())
 }
@@ -154,7 +154,7 @@ func TestGetNotificationList_MentionedStudentSuspended(t *testing.T) {
 
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
-    // Should return 200 OK, with a list of common students
+    // Should return 200 OK, with an empty list
     assert.Equal(t, http.StatusOK, w.Code)
     assert.Equal(t, `{"recipients":[]}`, w.Body.String())
 }
@@ -178,7 +178,7 @@ func TestGetNotificationList_SomeMentionedStudentSuspended(t *testing.T) {
 
     w := httptest.NewRecorder()
     router.ServeHTTP(w, req)
-    // Should return 200 OK, with a list of common students
+    // Should return 200 OK, with only one of the mentioned students
     assert.Equal(t, http.StatusOK, w.Code)
     assert.Equal(t, `{"recipients":["studenthon@gmail.com"]}`, w.Body.String())
 }

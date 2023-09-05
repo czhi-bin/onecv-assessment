@@ -17,14 +17,14 @@ func GetCommonStudents(teacherEmails []string) ([]string, error) {
 	// retrieve teacher IDs by emails
 	err := DB.Where("email IN (?)", teacherEmails).Find(&teachers).Error
 	if err != nil {
-		utils.Logger.Error(err, teacherEmails, "Error in retrieving teachers using teacher IDs from database")
+		utils.Logger.Error(err, teacherEmails, "Error in retrieving teachers using teacher emails from database")
 		return nil, err
 	} else if len(teachers) != len(teacherEmails) {
 		// some teacher have no students, common students will be empty
 		return nil, nil
 	}
 
-	// retrieve students registered to the teachers
+	// retrieve common students registered to all the teachers
 	var commonStudents []CommonStudent
 	teacherIds := getTeacherIds(teachers)
 	err = DB.Model(&model.Registration{}).
@@ -44,7 +44,7 @@ func GetCommonStudents(teacherEmails []string) ([]string, error) {
 	return commonStudentEmails, nil
 }
 
-// Map the teacher to its teacher ID
+// Retrieve the IDs of the teachers
 func getTeacherIds(teachers []model.Teacher) []int64 {
 	teacherIds := make([]int64, len(teachers))
 	for i, teacher := range teachers {
@@ -54,6 +54,7 @@ func getTeacherIds(teachers []model.Teacher) []int64 {
 	return teacherIds
 }
 
+// Retrieve the emails of the using the IDs of the students
 func getStudentEmailsFromIds(commonStudents []CommonStudent) ([]string, error) {
 	studentEmails := make([]string, len(commonStudents))
 	for i, commonStudent := range commonStudents {
